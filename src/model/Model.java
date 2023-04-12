@@ -7,7 +7,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.util.ArrayList;
 
 public class Model implements Runnable{
 
@@ -50,7 +49,7 @@ public class Model implements Runnable{
 
     @Override
     public void run() {
-        usuario = c.getView().getTextArea().getText();
+        usuario = c.getView().getUsernameField().getText();
         String[] urls = {"https://www.tiktok.com/@"+usuario+"/",
                 "https://www.youtube.com/@"+usuario,
                 "https://github.com/"+usuario};
@@ -61,7 +60,7 @@ public class Model implements Runnable{
                 con.setRequestMethod("GET");
                 int status = con.getResponseCode();
                 if (status < 299) {
-                    c.getView().getOutArea().append(urls[i]+"\n");
+                    c.getView().getOutputArea().append(urls[i]+"\n");
                 }
             } catch (ProtocolException e) {
                 throw new RuntimeException(e);

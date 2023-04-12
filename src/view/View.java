@@ -1,88 +1,98 @@
 package view;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 import controller.*;
 import model.*;
 
-public class View extends JFrame implements ActionListener{
-    //Clase que sirve de vista para el proyecto
-    Controller c;
-    Model model;
-    JButton button;
-    JTextArea textArea;
+public class View extends JFrame implements ActionListener {
+    private  Controller controller;
+    private  Model model;
+    private  JButton submitButton;
+    private  JTextField usernameField;
+    private  JTextArea outputArea;
+    private JLabel title;
 
-    Thread thread;
 
-    public JTextArea getOutArea() {
-        return outArea;
+    public JTextField getUsernameField() {
+        return usernameField;
     }
 
-    public JTextArea getTextArea() {
-        return textArea;
+    public JTextArea getOutputArea() {
+        return outputArea;
     }
 
-    public void setTextArea(JTextArea textArea) {
-        this.textArea = textArea;
-    }
 
-    JTextArea outArea;
-
-    public View(Controller c, Model model){
+    public View(Controller controller, Model model) {
+        this.controller = controller;
         this.model = model;
-        this.c = c;
-        c.setView(this);
-
-        CrearMiventana();
-
-
+        this.controller.setView(this);
+        this.submitButton = new JButton("Submit");
+        this.submitButton.addActionListener(this);
+        this.usernameField = new JTextField("username here", 20);
+        this.outputArea = new JTextArea(10, 40);
+        this.outputArea.setEditable(false);
+        ImageIcon cover = new ImageIcon("src/resources/troll.png");
+        Image image = cover.getImage();
+        Image newimg = image.getScaledInstance(120, 120,  java.awt.Image.SCALE_SMOOTH);
+        cover = new ImageIcon(newimg);
+        this.title = new JLabel(cover);
+        createWindow();
     }
-    public void CrearMiventana(){
+
+    private void createWindow() {
         setTitle("Java Osint");
-        setSize(500,500);
-        setLayout(new BorderLayout());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setPreferredSize(new Dimension(700,700));
-        Componentes();
-        getContentPane().setBackground(Color.cyan);
-        this.setVisible(true);
-
+        ImageIcon icon = new ImageIcon("src/resources/35885.jpg");
+        setIconImage(icon.getImage());
+        setPreferredSize(new Dimension(700, 700));
+        setContentPane(createMainPanel());
+        pack();
+        setLocationRelativeTo(null);
+        setVisible(true);
     }
-    public void Componentes(){
-        JPanel user = new JPanel();
-        JPanel show = new JPanel();
 
-        show.setLayout(new BorderLayout());
-        button = new JButton("Submit");
-        button.addActionListener(this);
+    private JPanel createMainPanel() {
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        user.add(button,BorderLayout.CENTER);
-        textArea = new JTextArea("username here",1,5);
-        outArea = new JTextArea(10,40);
-        user.add(textArea,BorderLayout.SOUTH);
-        user.add(outArea,BorderLayout.SOUTH);
-        show.add(user);
+        // create cover panel
+        JPanel coverPanel = new JPanel(new BorderLayout());
+        coverPanel.add(title, BorderLayout.NORTH);
 
-        this.getContentPane().add(show);
+        mainPanel.add(createUserPanel(), BorderLayout.NORTH);
+        mainPanel.add(createOutputPanel(), BorderLayout.SOUTH);
+
+        return mainPanel;
     }
+    private JPanel createUserPanel() {
+        JPanel userPanel = new JPanel(new GridLayout(1, 2, 10, 0));
+        userPanel.add(usernameField);
+        userPanel.add(submitButton);
+        return userPanel;
+    }
+
+    private JPanel createOutputPanel() {
+        JPanel outputPanel = new JPanel(new BorderLayout());
+        outputArea.setRows(30);
+        outputPanel.add(new JScrollPane(outputArea), BorderLayout.CENTER);
+        return outputPanel;
+    }
+
+    public void appendOutputText(String text) {
+        outputArea.setText(text);
+        outputArea.setCaretPosition(outputArea.getDocument().getLength());
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == button) {
-            getOutArea().setText("");
-           new Thread(model).start();
-
-
+        if (e.getSource() == submitButton) {
+            appendOutputText("");
+            new Thread(model).start();
         }
     }
-
 
 }
