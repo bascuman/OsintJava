@@ -52,7 +52,9 @@ public class Model implements Runnable{
         usuario = c.getView().getUsernameField().getText();
         String[] urls = {"https://www.tiktok.com/@"+usuario+"/",
                 "https://www.youtube.com/@"+usuario,
-                "https://github.com/"+usuario};
+                "https://github.com/"+usuario,
+                "https://open.spotify.com/user/"+usuario,
+                "https://www.tumblr.com/"+usuario};
         for (int i = 0; i < urls.length; i++) {
             try {
                 URL url = new URL(urls[i]);

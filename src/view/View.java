@@ -32,14 +32,10 @@ public class View extends JFrame implements ActionListener {
         this.controller.setView(this);
         this.submitButton = new JButton("Submit");
         this.submitButton.addActionListener(this);
-        this.usernameField = new JTextField("username here", 20);
+        this.usernameField = new JTextField(20);
+        usernameField.setToolTipText("username here");
         this.outputArea = new JTextArea(10, 40);
         this.outputArea.setEditable(false);
-        ImageIcon cover = new ImageIcon("src/resources/troll.png");
-        Image image = cover.getImage();
-        Image newimg = image.getScaledInstance(120, 120,  java.awt.Image.SCALE_SMOOTH);
-        cover = new ImageIcon(newimg);
-        this.title = new JLabel(cover);
         createWindow();
     }
 
@@ -59,9 +55,7 @@ public class View extends JFrame implements ActionListener {
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // create cover panel
-        JPanel coverPanel = new JPanel(new BorderLayout());
-        coverPanel.add(title, BorderLayout.NORTH);
+
 
         mainPanel.add(createUserPanel(), BorderLayout.NORTH);
         mainPanel.add(createOutputPanel(), BorderLayout.SOUTH);
